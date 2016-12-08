@@ -1,0 +1,22 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{ font-family:"宋体"; font-size:12px; background:#CCC; margin:0 auto;}
+h1{ margin:30px 0 0 380px; font-family:"黑体"; font-size:25px; font-style:normal;}
+
+#out{ background:#FFF; width:900px; margin:auto}
+#top{ FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#86C5D5,endColorStr=#ffffff); height:80px;}
+#top2{ height:4px; background: #276574; margin:0; padding:0; width:900px; overflow:hidden;}
+
+.middle{ margin:auto; border-width:1px; width:600px;}
+
+.line{ margin:20px 0 20px 0; padding:0; border-bottom:#000 dotted 1px;}
+
+.selectbg{ border:#6CF 1px; }
+.ipdiv{ margin:0;}
+.ipdiv span{ font: 14px "宋体" normal;}
+.textfield{ width:120px; border:#7f9db9 1px solid;}
+.textfield2{ width:94px; border:#7f9db9 1px solid;}
+
+.btn{ BORDER-RIGHT: #002D96 1px solid; PADDING-RIGHT: 2px; BORDER-TOP: #002D96 1px solid; PADDING-LEFT: 2px; FONT-SIZE: 12px; FILTER: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr=#FFFFFF, EndColorStr=#9DBCEA); BORDER-LEFT: #002D96 1px solid; CURSOR: hand; COLOR: black; PADDING-TOP: 2px; BORDER-BOTTOM: #002D96 1px solid; width:60px; margin:0 0 0 20px;}
+#down{FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#276574,endColorStr=#000000); height:25px;}

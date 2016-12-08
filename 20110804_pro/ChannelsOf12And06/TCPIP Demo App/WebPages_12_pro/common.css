@@ -1,0 +1,34 @@
+/* CSS Document */
+body{padding:0px;margin:0px;background-color:#efefef;color:#333;}
+body,p,div{font-size:12px;line-height:22px;font-family:arial;}
+a{}
+.font16{font-size:16px;font-family:arial;}
+.font14{font-size:14px;}
+.font20{font-size:20px;font-weight:bold;}
+.p10{padding:10px;}
+.org{color:#ff6600}
+.msgbox{background:#FFFCEE;border:1px solid #FEF194;padding:5px;}
+.msgbox p{padding:0px;margin:0px;}
+.btn,.btn2{background:#ff6600;border-right:1px solid #c9581a;border-bottom:1px solid #c9581a;border-top:1px; solid #ffeec3;border-left:1px solid #ffeec3;font-weight:bold;font-size:14px;color:#fff;height:26px;line-height:26px;cursor:pointer;overflow:hidden;padding-left:10px;padding-right:10px;}
+.input_txt{border:1px solid #dedede;background-color:#fff;height:30px;line-height:30px;padding-left:10px;}
+.disabled{background-color:#eee;background-image:none;}
+
+.header{background-color:#3f3f3f;color:#fff;}
+.header a{color:#fff;text-decoration:none;}
+.header td{height:40px;line-height:40px;padding:10px;font-weight:bold;}
+
+.tleft{width:200px;background-color:#333333}
+.tleft td a{display:block;width:160px;height:25px;}
+.menu td{border-bottom:1px solid #3e3f41;border-top:1px solid #4e4e4e;}
+.menu td a{color:#fff;text-decoration:none;font-size:14px;font-size:13px;font-weight:bold;padding-left:20px;}
+.menu .current{background-color:#efefef;}
+.menu .current a{color:#ed7f06;}
+.tright{padding:10px;}
+.tright td{font-size:13px;}
+.sysinfo{margin-top:20px;}
+.sysinfo td{width:10%;color:#3d3e4a;font-weight:bold;}
+.control_list td{text-align:center;font-size:12px;width:16.67%}
+.tagname{background:url(images/bg_pagetitle.gif)  repeat-x ; height:36px;line-height:36px;font-weight:bold;font-size:14px;color:#999;margin-bottom:10px;}
+.tagname span{font-size:12px;}
+.dot02{width:9px;height:16px;background:url(images/dot02.png) no-repeat;display:block;float:left;margin:10px;}
+.pl100{padding-left:100px;}

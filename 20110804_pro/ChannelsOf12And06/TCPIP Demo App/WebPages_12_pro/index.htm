@@ -1,0 +1,128 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>Netstone Powerview</title>
+<link href="common.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr class="header">
+    <td class="font16">Netstone PowerView</td>
+    <td >&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="200" valign="top" bgcolor="#333" class="tleft" style="height:100%"><table width="100%" border="0" cellspacing="0" cellpadding="10" class="menu">
+        <tr>
+          <td  class="current"><a href="index.htm">首 页</a></td>
+        </tr>
+        <tr>
+          <td ><a href="network.htm">网络设置</a></td>
+        </tr>
+        <tr>
+          <td><a href="password.htm">修改密码</a></td>
+        </tr>
+      </table></td>
+    <td valign="top" class="tright"><div class="tagname">运行概况<span class="pl100">IP: ~config_ip~ 　</span><span class="pl100" style="display:none;">| 　System Clock: 20~YR~年 ~MH~月~DA~日 ~HR~:~ME~ </span> </div>
+      <div class="msgbox">
+        <input type="hidden" id="id1" value=~showA~>
+        <input type="hidden" id="id2" value=~showV~>
+        <input type="hidden" id="id3" value=~TP~>
+        <input type="hidden" id="id4" value=~HI~>
+        <input type="hidden" id="id5" value=~ERRORNO~>
+        <script type="text/javascript">
+	var SAT=document.getElementById("id1").value;
+	var SVT=document.getElementById("id2").value;
+	var STT=document.getElementById("id3").value;
+	var SHT=document.getElementById("id4").value;
+	var SE =document.getElementById("id5").value;		
+	var SA= parseFloat(SAT);
+	var SV= parseFloat(SVT);
+	var ST= parseFloat(STT);
+	var SH= parseFloat(SHT);
+	var count=0;
+	var x=0;
+	if(SA>20){
+		document.write("<p class='org'>当前总电流超过20A，为保证设备安全运行，请检查各设备运行状况!</p>");
+		count=count+1;
+	}
+	if(SV>240||SV<180){
+		document.write("<p class='org'>系统检测到当前电压值偏离 180V~240V的范围，请检查电路供电是否正常!</p>");
+		count=count+1;		
+	}
+	if(ST>40){
+		document.write("<p class='org'>当前环境温度超过40℃，请检查机房空调运行是否正常!</p>");
+		count=count+1;		
+	}
+	if(SH>70){
+		document.write("<p class='org'>当前环境湿度超过70%，当环境湿度超过70%时，将可能对机柜内部分设备的运行产生影响，请实施监控机房内的环境情况，将机房环境湿度保持在50%以下为宜!</p>");
+		count=count+1;		
+	}
+	if(SE.indexOf("1")!=-1){
+		document.write("<p class='org'>");
+		for(x=0;x<=12;x++){
+			if(SE.charAt(x)=="1")
+				document.write("#"+(x+1)); 
+		
+		}
+		document.write("通道单路电流超过8A，请检查该路设备运行是否存在异常!</p>");
+	}
+
+	
+	if(count==0){
+		document.write("<p>设备运行正常。</p>");
+		count=0;
+	}
+</script>
+      </div>
+      <table width="100%" border="0" cellpadding="4" cellspacing="0" class="sysinfo">
+        <tr>
+          <td align="right">总电流</td>
+          <td height="50" class="font16">~showA~A</td>
+          <td align="right">输入电压</td>
+          <td class="font16">~showV~V</td>
+          <td  align="right">环境温度</td>
+          <td class="font16">~TP~℃</td>
+          <td align="right">湿度</td>
+          <td class="font16">~HI~%</td>
+        </tr>
+      </table>
+      <form name="form2" method="get" action="index.htm">
+        <table width="100%" border="1" cellpadding="5" cellspacing="0" bordercolor="#DBDBDB" class="control_list">
+          <tr>
+            <td bgcolor="#E7E7E7"><label> # 1</label></td>
+            <td bgcolor="#E7E7E7"><label> # 2</label></td>
+            <td bgcolor="#E7E7E7"><label> # 3</label></td>
+            <td bgcolor="#E7E7E7"><label> # 4</label></td>
+            <td bgcolor="#E7E7E7"><label> # 5</label></td>
+            <td bgcolor="#E7E7E7"><label> # 6</label></td>
+          </tr>
+          <tr>
+            <td>~showA1~ A </td>
+            <td>~showA2~ A</td>
+            <td>~showA3~ A</td>
+            <td>~showA4~ A</td>
+            <td>~showA5~ A</td>
+            <td>~showA6~ A</td>
+          </tr>
+          <tr>
+            <td bgcolor="#E7E7E7"><label> # 7</label></td>
+            <td bgcolor="#E7E7E7"><label> # 8</label></td>
+            <td bgcolor="#E7E7E7"><label> # 9</label></td>
+            <td bgcolor="#E7E7E7"><label> # 10</label></td>
+            <td bgcolor="#E7E7E7"><label> # 11</label></td>
+            <td bgcolor="#E7E7E7"><label> # 12</label></td>
+          </tr>
+          <tr>
+            <td>~showA7~ A</td>
+            <td>~showA8~ A</td>
+            <td>~showA9~ A</td>
+            <td>~showA10~ A</td>
+            <td>~showA11~ A</td>
+            <td>~showA12~ A</td>
+          </tr>
+        </table>
+      </form></td>
+  </tr>
+</table>
+</body>
+</html>

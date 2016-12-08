@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>Netstone Powerview Client v2.0 </title>
+<link href="common.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr class="header">
+    <td class="font16"><img src="images/logo.png" width="412" height="47" /></td>
+    <td width="130">   <img src="images/bullet_green.png" title="打开" width="16" height="16" />   ~ShareOn~   <img src="images/bullet_gray.png" title="关闭" width="16" height="16" />  ~ShareOff~   <img src="images/bullet_orange.png" title="负载" width="16" height="16" />  ~ShareOut~  </td>
+    
+  </tr>
+</table>
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="200" valign="top" class="tleft"><table width="100%" border="0" cellspacing="0" cellpadding="10" class="menu">
+      <tr>
+        <td  class="current"><a href="index.htm">首 页</a></td>
+      </tr>
+      <tr>
+        <td ><a href="network.htm">网络设置</a></td>
+      </tr>
+      <tr>
+        <td><a href="password.htm">修改密码</a></td>
+      </tr>
+    </table></td>
+    <td valign="top" class="tright">
+      <div class="tagname"><span class="dot02"></span>运行概况<span class="pl100">IP: ~config_ip~ 　</span><span class="pl100" style="display:none;">| 　System Clock: 20~YR~年 ~MH~月~DA~日 ~HR~:~ME~ </span>
+      </div>	
+      <div class="msgbox">
+	<input type="hidden" id="id1" value=~showA~>
+	<input type="hidden" id="id2" value=~showV~>
+	<input type="hidden" id="id3" value=~TP~>
+	<input type="hidden" id="id4" value=~HI~>
+	<input type="hidden" id="id5" value=~ERRORNO~>
+<script type="text/javascript">
+	var SAT=document.getElementById("id1").value;
+	var SVT=document.getElementById("id2").value;
+	var STT=document.getElementById("id3").value;
+	var SHT=document.getElementById("id4").value;
+	var SE =document.getElementById("id5").value;		
+	var SA= parseFloat(SAT);
+	var SV= parseFloat(SVT);
+	var ST= parseFloat(STT);
+	var SH= parseFloat(SHT);
+	var count=0;
+	var x=0;
+	if(SA>20){
+		document.write("<p class='org'><img src='images/alert.gif' width='24' height='24' align='absmiddle' />当前总电流超过20A，为保证设备安全运行，请检查各设备运行状况!</p>");
+		count=count+1;
+	}
+	if(SV>240||SV<180){
+		document.write("<p class='org'><img src='images/alert.gif' width='24' height='24' align='absmiddle' />系统检测到当前电压值偏离 180V~240V的范围，请检查电路供电是否正常!</p>");
+		count=count+1;		
+	}
+	if(ST>40){
+		document.write("<p class='org'><img src='images/alert.gif' width='24' height='24' align='absmiddle' />当前环境温度超过40℃，请检查机房空调运行是否正常!</p>");
+		count=count+1;		
+	}
+	if(SH>70){
+		document.write("<p class='org'><img src='images/alert.gif' width='24' height='24' align='absmiddle' />当前环境湿度超过70%，当环境湿度超过70%时，将可能对机柜内部分设备的运行产生影响，请实施监控机房内的环境情况，将机房环境湿度保持在50%以下为宜!</p>");
+		count=count+1;		
+	}
+	if(SE.indexOf("1")!=-1){
+		document.write("<p class='org'><img src='images/alert.gif' width='24' height='24' align='absmiddle' />");
+		for(x=0;x<=12;x++){
+			if(SE.charAt(x)=="1")
+				document.write("#"+(x+1)); 
+		
+		}
+		document.write("通道单路电流超过8A，请检查该路设备运行是否存在异常!</p>");
+	}
+
+	
+	if(count==0){
+		document.write("<p><img src='images/alert2.png' width='24' height='24' align='absmiddle' />设备运行正常。</p>");
+		count=0;
+	}
+</script> 
+      </div>
+
+      <table width="100%" border="0" cellpadding="4" cellspacing="0" class="sysinfo">
+      <tr>
+        <td rowspan="2" align="right"><img src="images/ico1.gif" width="60" height="60" /></td>
+        <td height="30">总电流</td>
+        <td rowspan="2" align="right"><img src="images/ico3.gif" width="60" height="60" /></td>
+        <td>输入电压</td>
+        <td rowspan="2" align="right"><img src="images/ico4.gif" width="60" height="60" /></td>
+        <td>环境温度</td>
+        <td rowspan="2" align="right"><img src="images/ico5.gif" width="60" height="60" /></td>
+        <td>湿度</td>
+      </tr>
+      <tr class="font20">
+        <td height="50">~showA~A</td>
+        <td>~showV~V</td>
+        <td>~TP~℃</td>
+        <td>~HI~%</td>
+      </tr>
+    </table>
+
+          <div class="tagname"><span class="dot02"></span>电源控制</div>
+
+          <form name="form2" method="get" action="index.htm">
+      <table width="100%" border="1" cellpadding="5" cellspacing="0" bordercolor="#DBDBDB" class="control_list">
+	     <tr style="display:none">
+            <td align="center"><select id="RELAY1" name="RELAY1">		<!--style="display:none"-->
+              <option value="1" ~ledSelected(1,TRUE)~>ON</option>
+              <option value="0" ~ledSelected(1,FALSE)~>OFF</option>
+              </select></td>
+            <td align="center"><select id="RELAY2" name="RELAY2">
+              <option value="1" ~ledSelected(2,TRUE)~>ON</option>
+              <option value="0" ~ledSelected(2,FALSE)~>OFF</option>
+              </select></td>
+            <td align="center"><select id="RELAY3" name="RELAY3">
+              <option value="1" ~ledSelected(3,TRUE)~>ON</option>
+              <option value="0" ~ledSelected(3,FALSE)~>OFF</option>
+              </select></td>
+            <td align="center"><select id="RELAY4" name="RELAY4">
+              <option value="1" ~ledSelected(4,TRUE)~>ON</option>
+              <option value="0" ~ledSelected(4,FALSE)~>OFF</option>
+              </select></td>
+            <td align="center"><select id="RELAY5" name="RELAY5">
+              <option value="1" ~ledSelected(5,TRUE)~>ON</option>
+              <option value="0" ~ledSelected(5,FALSE)~>OFF</option>
+              </select></td>
+            <td align="center"><select id="RELAY6" name="RELAY6">
+              <option value="1" ~ledSelected(6,TRUE)~>ON</option>
+              <option value="0" ~ledSelected(6,FALSE)~>OFF</option>
+              </select></td>
+	     </tr>
+            <tr>
+              <td bgcolor="#E7E7E7"><label><input type="checkbox" id="cbx1" onclick='unselectall()' /> # 1</label></td>
+              <td bgcolor="#E7E7E7"><label><input type="checkbox" id="cbx2" onclick='unselectall()' /> # 2</label></td>
+              <td bgcolor="#E7E7E7"><label><input type="checkbox" id="cbx3" onclick='unselectall()' /> # 3</label></td>
+              <td bgcolor="#E7E7E7"><label><input type="checkbox" id="cbx4" onclick='unselectall()' /> # 4</label></td>
+              <td bgcolor="#E7E7E7"><label><input type="checkbox" id="cbx5" onclick='unselectall()' /> # 5</label></td>
+              <td bgcolor="#E7E7E7"><label><input type="checkbox" id="cbx6" onclick='unselectall()' /> # 6</label></td>
+            </tr>
+            <tr>
+              <td><script type="text/javascript"> var myid = document.getElementById("RELAY1"); var ledSelected = myid.options[myid.selectedIndex].value;if(1==ledSelected ) document.write("<img src='images/stat_1.png' width='40' height='54' />");else document.write("<img src='images/stat_0.png' width='40' height='54' />");</script> </td>
+              <td><script type="text/javascript"> var myid = document.getElementById("RELAY2"); var ledSelected = myid.options[myid.selectedIndex].value;if(1==ledSelected ) document.write("<img src='images/stat_1.png' width='40' height='54' />");else document.write("<img src='images/stat_0.png' width='40' height='54' />");</script> </td>
+              <td><script type="text/javascript"> var myid = document.getElementById("RELAY3"); var ledSelected = myid.options[myid.selectedIndex].value;if(1==ledSelected ) document.write("<img src='images/stat_1.png' width='40' height='54' />");else document.write("<img src='images/stat_0.png' width='40' height='54' />");</script> </td>
+              <td><script type="text/javascript"> var myid = document.getElementById("RELAY4"); var ledSelected = myid.options[myid.selectedIndex].value;if(1==ledSelected ) document.write("<img src='images/stat_1.png' width='40' height='54' />");else document.write("<img src='images/stat_0.png' width='40' height='54' />");</script> </td>
+              <td><script type="text/javascript"> var myid = document.getElementById("RELAY5"); var ledSelected = myid.options[myid.selectedIndex].value;if(1==ledSelected ) document.write("<img src='images/stat_1.png' width='40' height='54' />");else document.write("<img src='images/stat_0.png' width='40' height='54' />");</script> </td>
+              <td><script type="text/javascript"> var myid = document.getElementById("RELAY6"); var ledSelected = myid.options[myid.selectedIndex].value;if(1==ledSelected ) document.write("<img src='images/stat_1.png' width='40' height='54' />");else document.write("<img src='images/stat_0.png' width='40' height='54' />");</script> </td>
+            </tr>
+
+
+            
+　　
+        </table>
+         
+            <p>
+
+		<input name="Submit2" type="button" value="打开" class="btn"  onclick='check(1)'>
+	   	<input name="Submit2" type="button" value="关闭" class="btn"  onclick='check(0)'>
+              
+              <input name='chkAll' type='checkbox' id='chkAll' onclick='CheckAll(form2)'>全选</a></p>
+      </form>
+
+          <p></p>
+          <p>&nbsp;</p>
+          <p></p>
+          <p>&nbsp;</p></td>
+  </tr>
+</table>
+</body>
+<script language=javascript>
+function unselectall(){
+	if(document.form2.chkAll.checked){
+		document.form2.chkAll.checked = document.form2.chkAll.checked&0;
+	}
+}
+
+
+function CheckAll(form){
+for (var i=0;i<form.elements.length;i++){
+var e = form.elements[i];
+if (e.Name != 'chkAll'&&e.disabled==false)
+e.checked = form.chkAll.checked;
+
+}
+}
+
+function check(temp){
+	if(temp==1){
+		if(confirm("确定开启所选通道吗？（各通道将延迟1S顺序开启）"));else return;		
+	}else{
+		if(confirm("确定关闭所选通道吗？关闭后所接设备将停止运行!"));else return;
+	}
+		
+	for(var x=1;x<7;x++){
+ 		var selectid = document.getElementById("RELAY"+x);
+        	var select = selectid.options[selectid.selectedIndex].value;
+		var chkid = document.getElementById("cbx"+x);
+        	var chk = chkid.checked;
+		if(temp == 1){		
+				if(chk == true)			
+					selectid.options[0].selected=true;								
+		}else if(temp == 0){			
+				if(chk == true)
+					selectid.options[1].selected=true;					
+		}
+	}
+
+document.form2.submit();
+window.setTimeout("refreshPage()",2000);
+}
+function refreshPage()
+{
+ window.location.reload();   
+}
+
+</script>
+</html>
