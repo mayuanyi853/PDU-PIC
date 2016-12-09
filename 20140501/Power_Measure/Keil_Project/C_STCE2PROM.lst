@@ -1,0 +1,134 @@
+C51 COMPILER V8.08   C_STCE2PROM                                                           07/29/2010 17:32:26 PAGE 1   
+
+
+C51 COMPILER V8.08, COMPILATION OF MODULE C_STCE2PROM
+OBJECT MODULE PLACED IN .\C_STCE2PROM.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Hard_Module\C_STCE2PROM.c BROWSE INCDIR(..\Hard_Module;..\System_Functio
+                    -n;..\CPU_Register) DEBUG OBJECTEXTEND PRINT(.\C_STCE2PROM.lst) OBJECT(.\C_STCE2PROM.obj)
+
+line level    source
+
+   1          
+   2          
+   3          #include "STC12C5620ad_H.h"
+   4          
+   5          #define ISP_IAP_BYTE_READ    0x01
+   6          #define ISP_IAP_BYTE_PROGRAM 0x02
+   7          #define ISP_SECTOR_ERASE     0x03
+   8          #define ENABLE_ISP           0x85
+   9          
+  10          /*=======================================================================
+  11          函数名称：ISP_Disable
+  12          函数功能：禁止IAP操作
+  13          输入参数：
+  14          输出参数：无
+  15          返 回 值：
+  16          其它说明：
+  17          =======================================================================*/
+  18          void ISP_Disable( void ){
+  19   1      
+  20   1          ISP_CONTR = 0x00;
+  21   1          ISP_CMD   = 0x00;
+  22   1          ISP_TRIG  = 0x00;
+  23   1          ISP_ADDRH = 0xFF;
+  24   1          ISP_ADDRL = 0xFF;
+  25   1      
+  26   1      }
+  27          
+  28          /*=======================================================================
+  29          函数名称：ISP_Byte_Read
+  30          函数功能：读EEPROM中的一个字节，需要传递地址
+  31          输入参数：
+  32          输出参数：无
+  33          返 回 值：读取的数据
+  34          其它说明：
+  35          =======================================================================*/
+  36          unsigned char ISP_Byte_Read( unsigned int Sector_Address ){
+  37   1      
+  38   1          unsigned char Temp_Data;
+  39   1      
+  40   1          ISP_CONTR = ENABLE_ISP;
+  41   1          ISP_CMD   = ISP_IAP_BYTE_READ;
+  42   1          ISP_ADDRH = Sector_Address / 256;
+  43   1          ISP_ADDRL = Sector_Address % 256;
+  44   1          ISP_TRIG  = 0x5A;
+  45   1          ISP_TRIG  = 0xA5;
+  46   1          Temp_Data = ISP_DATA;
+  47   1          ISP_Disable();
+  48   1          // 延迟
+  49   1          return Temp_Data;
+  50   1      
+  51   1      }
+  52          
+  53          /*=======================================================================
+  54          函数名称：ISP_Byte_Write
+C51 COMPILER V8.08   C_STCE2PROM                                                           07/29/2010 17:32:26 PAGE 2   
+
+  55          函数功能：写入EEPROM中的一个字节，需要传递地址和要写入的数据
+  56          输入参数：要擦除的扇区地址
+  57          输出参数：无
+  58          返 回 值：无
+  59          其它说明：
+  60          =======================================================================*/
+  61          void ISP_Byte_Write( unsigned int Sector_Address, unsigned char Write_Data ){
+  62   1      
+  63   1          ISP_CONTR = ENABLE_ISP;
+  64   1          ISP_CMD   = ISP_IAP_BYTE_PROGRAM;
+  65   1          ISP_ADDRH = Sector_Address / 256;
+  66   1          ISP_ADDRL = Sector_Address % 256;
+  67   1          ISP_DATA  = Write_Data;
+  68   1          ISP_TRIG  = 0x5A;
+  69   1          ISP_TRIG  = 0xA5;
+  70   1          ISP_Disable();
+  71   1      
+  72   1      }
+  73          
+  74          /*=======================================================================
+  75          函数名称：Sector_Erase
+  76          函数功能：扇区擦除
+  77          输入参数：要擦除的扇区地址
+  78          输出参数：无
+  79          返 回 值：无
+  80          其它说明：
+  81          =======================================================================*/
+  82          void Sector_Erase( unsigned int Sector_Address ){
+  83   1      
+  84   1          ISP_CONTR = ENABLE_ISP;
+  85   1          ISP_CMD   = 0x03;
+  86   1          ISP_ADDRH = Sector_Address / 256;
+  87   1          ISP_ADDRL = Sector_Address % 256;
+  88   1          ISP_TRIG  = 0x5A;
+  89   1          ISP_TRIG  = 0xA5;
+  90   1          ISP_Disable();
+  91   1      
+  92   1      }
+  93          
+  94          
+  95          
+  96          
+  97          
+  98          
+  99          
+ 100          
+ 101          
+ 102          
+ 103          
+ 104          
+ 105          
+ 106          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     94    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V8.08   C_STCE2PROM                                                           07/29/2010 17:32:26 PAGE 3   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

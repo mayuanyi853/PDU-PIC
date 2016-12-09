@@ -1,0 +1,251 @@
+C51 COMPILER V8.08   C_CS5460                                                              07/29/2010 17:32:25 PAGE 1   
+
+
+C51 COMPILER V8.08, COMPILATION OF MODULE C_CS5460
+OBJECT MODULE PLACED IN .\C_CS5460.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\Hard_Module\C_CS5460.c BROWSE INCDIR(..\Hard_Module;..\System_Function;.
+                    -.\CPU_Register) DEBUG OBJECTEXTEND PRINT(.\C_CS5460.lst) OBJECT(.\C_CS5460.obj)
+
+line level    source
+
+   1          
+   2          /*=========================================================
+   3          版    本：V1.0
+   4          开发时间：2010年7月26日
+   5          版权所有：2010--2099,河北科技大学  信息科学与工程系  孟志永
+   6                                                                        手机：13933120973
+   7                                                                                     Email：KDMZY@163.com
+   8            文 件 名：C_CS5460.c
+   9            作    者: 孟志永
+  10            版    本: V1.0                
+  11            日    期: 2010年7月26日
+  12            描述信息: CS5460功率计芯片驱动程序
+  13            其他说明: 芯片类型：STC12C5604AD         
+  14            功能列表: 
+  15            历史纪录:   
+  16                      1、日    期:
+  17                         作    者:
+  18                         修改内容:
+  19          =========================================================*/
+  20          #include "STC12C5620AD_H.h"     
+  21          #include "H_Interface.h"
+  22          
+  23          /*=======================================================================
+  24                                          CS5460命令字和寄存器地址预定义
+  25          =======================================================================*/
+  26          /*
+  27          #define cmdStartCVTSigle   0xE0   // 单次转换启动命令
+  28          #define cmdStartCVTCntus   0xE8   // 连续转换启动命令
+  29          #define cmdSYNC0           0xFE   // SYNC0命令
+  30          #define cmdSYNC1           0xFF   
+  31          #define cmdPowerUpHalt     0xA0   // 上电命令
+  32          #define cmdPowerIDLE       0x88   // 掉电并进入待机模式
+  33          #define cmdPowerSleep      0x90   // 掉电并进入睡眠模式
+  34          
+  35          #define cmdCabBase                 0xC0   // 校准的基本命令
+  36          #define cmdVCab            (0x01 << 4) // 电压通道校准命令
+  37          #define cmdICab            (0x01 << 3) // 电流通道校准命令
+  38          #define cmdACCab           (0x01 << 2) // AC校准
+  39          #define cmdGainCab         (0x01 << 1) // 增益校准
+  40          #define cmdOffsetCab       (0x01 << 2) // 偏置校准
+  41          
+  42          #define cmdRegRead              (0x00 << 6) // 寄存器写命令
+  43          #define cmdRegWrite         (0x01 << 6) // 寄存器写命令
+  44          
+  45          #define addConfig               (0x00 << 1) // 配置寄存器地址
+  46          #define addIOffset              (0x01 << 1) // 电流偏置校准寄存器地址
+  47          #define addIGain                (0x02 << 1) // 电流增益寄存器地址
+  48          #define addVOffset              (0x03 << 1) // 电压偏置寄存器地址
+  49          #define addVGain                (0x04 << 1) // 电压增益寄存器地址
+  50          #define addCycleCount       (0x05 << 1) // A/D每个计算周期的时钟数量寄存器地址
+  51          #define addPulseRate        (0x06 << 1) // EOUT和EDIR能量脉冲输出的速率寄存器地址
+  52          #define addI                    (0x07 << 1) // 上一次的电流值寄存器地址
+  53          #define addV                    (0x08 << 1) // 上一次的电压值寄存器地址
+  54          #define addP                    (0x09 << 1) // 上一次的功率寄存器地址
+C51 COMPILER V8.08   C_CS5460                                                              07/29/2010 17:32:25 PAGE 2   
+
+  55          #define addE                    (0x0A << 1) // 上一次的能量值寄存器地址
+  56          #define addIRMS                 (0x0B << 1) // RMS电流的寄存器地址
+  57          #define addVRMS                 (0x0C << 1) // RMS电压的寄存器地址
+  58          #define addTBC                  (0x0D << 1) // 时基校准寄存器地址
+  59          #define addPowerOffset      (0x0E << 1) // 功率偏置寄存器地址
+  60          #define addStatus               (0x0F << 1) // 状态寄存器地址
+  61          #define addIACOffset            (0x10 << 1) // 电流AC偏置寄存器地址
+  62          #define addVADOffset            (0x11 << 1) // 电压AC偏置寄存器地址
+  63          
+  64          #define addMask                 (0x1A << 1) // 屏蔽寄存器地址
+  65          #define addControl          (0x1C << 1) // 控制寄存器地址
+  66          */
+  67          /*========================================================================
+  68          sbit CS5460_SDI   = P2^4; // CS560的串行数据输入端
+  69          sbit CS5460_SDO   = P0^2; // CS560的串行数据输出端
+  70          sbit CS5460_SCLK  = P1^0; // CS560的串行时钟输入端
+  71          sbit CS5460_CS    = P0^3; // CS560的片选控制端
+  72          ========================================================================*/
+  73          
+  74          /*=======================================================================
+  75          函数名称：CS5460_Send
+  76          函数功能: CS5460 SPI 发送数据的函数
+  77          输入参数：要发送的数据
+  78          输出参数：返回当前SDO输出的数据
+  79          其它说明：无
+  80          =======================================================================*/
+  81          unsigned char CS5460_Send( unsigned char Send_Data ){
+  82   1      
+  83   1              unsigned char i;
+  84   1              unsigned char Read_Data;
+  85   1      
+  86   1              Read_Data = 0;
+  87   1              for( i = 0; i < 8; i++ ){                                        // 把命令字发送出去
+  88   2                      CS5460_SCLKLow; //CS5460_SCLKLow; CS5460_SCLKLow; CS5460_SCLKLow;
+  89   2                      if( ( Send_Data & 0x80 ) == 0x80 ){ CS5460_SDIHigh; }
+  90   2                      else                                                      { CS5460_SDILow;  } 
+  91   2                      Read_Data <<= 1;
+  92   2                      CS5460_SDO = 1;
+  93   2                      if( CS5460_SDO ){ Read_Data |= 1; }
+  94   2                      CS5460_SCLKHigh;  //CS5460_SCLKHigh;  CS5460_SCLKHigh;  CS5460_SCLKHigh;  
+  95   2      
+  96   2              //      CS5460_SCLKLow;
+  97   2                      Send_Data <<= 1;
+  98   2              }
+  99   1      
+ 100   1              return Read_Data;
+ 101   1      
+ 102   1      }
+ 103          
+ 104          /*=======================================================================
+ 105          函数名称：CS5460_SendCmd
+ 106          函数功能: CS5460 SPI 发送命令的函数
+ 107          输入参数：要发送的命令
+ 108          输出参数：无
+ 109          其它说明：无
+ 110          =======================================================================*/
+ 111          void CS5460_SendCmd( unsigned char Send_Data ){
+ 112   1      
+ 113   1              CS5460_CSLow;
+ 114   1              CS5460_Send( cmdSYNC1 );  // 
+ 115   1              CS5460_Send( cmdSYNC1 );  // 
+ 116   1              CS5460_Send( cmdSYNC1 );  // 
+C51 COMPILER V8.08   C_CS5460                                                              07/29/2010 17:32:25 PAGE 3   
+
+ 117   1              CS5460_Send( cmdSYNC0 );  // 
+ 118   1              CS5460_CSHigh;
+ 119   1      
+ 120   1              CS5460_CSLow;
+ 121   1              CS5460_Send( Send_Data );
+ 122   1              CS5460_CSHigh;
+ 123   1      
+ 124   1      }
+ 125          
+ 126          /*=======================================================================
+ 127          函数名称：CS5460_ReadReg
+ 128          函数功能：读取CS5460的某一项寄存器的函数
+ 129          输入参数：要获取的寄存器
+ 130          输出参数：当前寄存器的内容
+ 131          其它说明：无
+ 132          =======================================================================*/
+ 133          long CS5460_ReadReg( unsigned char Reg_Address ){
+ 134   1      
+ 135   1              long Read_Data;
+ 136   1              unsigned char Temp_Data0 = 0;
+ 137   1              unsigned char Temp_Data1 = 0;
+ 138   1              unsigned char Temp_Data2 = 0;
+ 139   1              unsigned char Temp_Data3 = 0;
+ 140   1      
+ 141   1              CS5460_SCLKLow; 
+ 142   1              CS5460_CSLow;
+ 143   1              CS5460_CSLow;
+ 144   1              CS5460_CSLow;
+ 145   1              CS5460_CSLow;
+ 146   1      
+ 147   1              CS5460_Send( cmdRegRead | Reg_Address );
+ 148   1              Temp_Data0 = CS5460_Send( cmdSYNC0 );   
+ 149   1              Temp_Data1 = CS5460_Send( cmdSYNC0 );
+ 150   1              Temp_Data2 = CS5460_Send( cmdSYNC0 );
+ 151   1      
+ 152   1              Read_Data = Temp_Data0;
+ 153   1              Read_Data <<= 8;
+ 154   1              Read_Data |= Temp_Data1;
+ 155   1              Read_Data <<= 8;
+ 156   1              Read_Data |= Temp_Data2;
+ 157   1      
+ 158   1              CS5460_CSHigh;   
+ 159   1      
+ 160   1              return Read_Data;
+ 161   1      
+ 162   1      }
+ 163          
+ 164          /*=======================================================================
+ 165          函数名称：CS5460_ReadAllReg
+ 166          函数功能：顺序读取CS5460的n个寄存器的函数
+ 167          输入参数：要读取的寄存器起始地址和要读取的寄存器数量
+ 168          输出参数：无
+ 169          其它说明：读出的结果放入到了long  CS5460_RegBuf[18]寄存器值缓冲区中
+ 170          =======================================================================*/
+ 171          /*
+ 172          void CS5460_ReadAllReg( unsigned char RegStart_Address, unsigned char Read_Number ){
+ 173          
+ 174                  unsigned char i;
+ 175                  unsigned char j;
+ 176          
+ 177                  j = ( RegStart_Address >> 1 ) ;
+ 178          
+C51 COMPILER V8.08   C_CS5460                                                              07/29/2010 17:32:25 PAGE 4   
+
+ 179                  for( i = 0; i < Read_Number; i++ ){
+ 180                          CS5460_RegBuf[j++] = CS5460_ReadReg( RegStart_Address++ );
+ 181                  } 
+ 182          
+ 183          } 
+ 184          */
+ 185          
+ 186          /*=======================================================================
+ 187          函数名称：CS5460_WriteReg
+ 188          函数功能：写CS5460的某一项寄存器的函数
+ 189          输入参数：要写的寄存器地址,要写入的数据0、数据1，数据2
+ 190          输出参数：无
+ 191          其它说明：无
+ 192          =======================================================================*/
+ 193          void CS5460_WriteReg( unsigned char Reg_Address, unsigned char Reg_Data0, unsigned char Reg_Data1, unsigne
+             -d char Reg_Data2 ){
+ 194   1      
+ 195   1              CS5460_CSLow;
+ 196   1      
+ 197   1              CS5460_Send( cmdRegWrite | Reg_Address );
+ 198   1              CS5460_Send( Reg_Data0 );
+ 199   1              CS5460_Send( Reg_Data1 );
+ 200   1              CS5460_Send( Reg_Data2 );  
+ 201   1      
+ 202   1              CS5460_CSHigh;
+ 203   1      
+ 204   1      }
+ 205          
+ 206          
+ 207          
+ 208          
+ 209          
+ 210          
+ 211          
+ 212          
+ 213          
+ 214          
+ 215          
+ 216          
+ 217          
+ 218          
+ 219          
+ 220          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    247    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

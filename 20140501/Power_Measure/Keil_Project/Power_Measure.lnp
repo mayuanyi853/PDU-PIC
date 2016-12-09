@@ -1,0 +1,6 @@
+".\C_Main.obj",
+".\C_CS5460.obj",
+".\C_STCE2PROM.obj",
+".\C_STC12C5404ADMdu.obj" 
+TO "Power_Measure" 
+RAMSIZE(256) 
